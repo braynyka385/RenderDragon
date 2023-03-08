@@ -9,6 +9,7 @@ namespace RenderDragon
     class Block
     {
         private int[] pos = new int[3];
+        
         public Block(int x, int y, int z)
         {
             pos[0] = x;

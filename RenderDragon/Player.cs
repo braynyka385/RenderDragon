@@ -56,9 +56,13 @@ namespace RenderDragon
         {
             double theta = hFOV / 2;
             double alpha = vFOV / 2;
-            double xLen = 1 * Math.Tan(theta) / (pos[2]+z);
+            //double xLen = 1 * Math.Tan(theta) / (pos[2]+z);
+            double xLen = -(z + pos[2]) / Math.Tan(theta);
+            xLen *= 2;
             xLen += 1;
-            double yLen = 1 * Math.Tan(alpha) / (pos[2]+z);
+            //double yLen = 1 * Math.Tan(alpha) / (pos[2]+z);
+            double yLen = -(z + pos[2]) / Math.Tan(alpha);
+            yLen *= 2;
             yLen += 1;
 
             double x2 = map(x, 0 - pos[0], xLen - pos[0], 0, 1.0);
