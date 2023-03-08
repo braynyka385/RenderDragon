@@ -61,7 +61,8 @@ namespace RenderDragon
 
         private void gameEngine_Tick(object sender, EventArgs e)
         {
-            player.Move(0, 0, -1);
+            player.Move(0.00, 0, -0.01);
+            label1.Text = player.GetPos()[2].ToString();
             Refresh();
         }
         //https://en.wikipedia.org/wiki/Perspective_(graphical)

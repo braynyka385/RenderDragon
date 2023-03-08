@@ -22,9 +22,14 @@ namespace RenderDragon
 
         public void Move(double x, double y, double z)
         {
-            pos[0] = x;
-            pos[1] = y;
-            pos[2] = z;
+            pos[0] += x;
+            pos[1] += y;
+            pos[2] += z;
+        }
+
+        public double[] GetPos()
+        {
+            return pos;
         }
         public bool isPointInView(double x, double y, double z)
         {
@@ -48,13 +53,13 @@ namespace RenderDragon
         {
             double theta = hFOV / 2;
             double alpha = vFOV / 2;
-            double xLen = 2 * Math.Tan(theta) / z;
+            double xLen = 2 * Math.Tan(theta) / (z+pos[2]);
             xLen += 1;
-            double yLen = 2 * Math.Tan(alpha) / z;
+            double yLen = 2 * Math.Tan(alpha) / (z+pos[2]);
             yLen += 1;
 
-            double x2 = map(x, 0, xLen, 0, 1.0);
-            double y2 = map(y, 0, yLen, 0, 1.0);
+            double x2 = map(x, 0 - pos[0], xLen, 0, 1.0);
+            double y2 = map(y, 0 - pos[1], yLen, 0, 1.0);
 
             return new double[] { x2, y2 };
         }
