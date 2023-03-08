@@ -28,18 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            this.gameEngine = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
+            // 
+            // gameEngine
+            // 
+            this.gameEngine.Enabled = true;
+            this.gameEngine.Tick += new System.EventHandler(this.gameEngine_Tick);
             // 
             // GameScreen
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "GameScreen";
-            this.Size = new System.Drawing.Size(600, 600);
+            this.Size = new System.Drawing.Size(800, 738);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.GameScreen_Paint);
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private System.Windows.Forms.Timer gameEngine;
     }
 }

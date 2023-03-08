@@ -8,13 +8,60 @@ namespace RenderDragon
 {
     internal class Player
     {
-        UInt16 cameraDirectionX = UInt16.MaxValue / 2;
-        UInt16 cameraDirectionY = UInt16.MaxValue / 2;
+        double cameraDirX = 0;
+        double cameraDirY = 0;
+        byte hFOV;
+        byte vFOV = 90;
+
 
         double[] pos = new double[3]; //x,y,z
-        public Player(double x, double y, double z)
+        public Player(double x, double y, double z, byte FOV)
         {
+            hFOV = FOV;
+        }
 
+        public void Move(double x, double y, double z)
+        {
+            pos[0] = x;
+            pos[1] = y;
+            pos[2] = z;
+        }
+        public bool isPointInView(double x, double y, double z)
+        {
+            double theta = hFOV/2;
+            double alpha = vFOV/2;
+            double xLen = 2*Math.Tan(theta)/z;
+            xLen += 1;
+            double yLen = 2*Math.Tan(alpha)/z;
+            yLen += 1;
+
+            double deltaX = pos[0] - x;
+            double deltaY = pos[1] - y;
+            if (z > pos[2] && deltaX < xLen && deltaY < yLen)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public double[] ProjectPoint(int x, int y, int z)
+        {
+            double theta = hFOV / 2;
+            double alpha = vFOV / 2;
+            double xLen = 2 * Math.Tan(theta) / z;
+            xLen += 1;
+            double yLen = 2 * Math.Tan(alpha) / z;
+            yLen += 1;
+
+            double x2 = map(x, 0, xLen, 0, 1.0);
+            double y2 = map(y, 0, yLen, 0, 1.0);
+
+            return new double[] { x2, y2 };
+        }
+
+        private double map(double s, double a1, double a2, double b1, double b2)
+        {
+            return b1 + (s - a1) * (b2 - b1) / (a2 - a1);
         }
     }
 
