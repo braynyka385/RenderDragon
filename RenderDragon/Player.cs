@@ -18,6 +18,9 @@ namespace RenderDragon
         public Player(double x, double y, double z, byte FOV)
         {
             hFOV = FOV;
+            pos[0] = x;
+            pos[1] = y;
+            pos[2] = z;
         }
 
         public void Move(double x, double y, double z)
@@ -53,13 +56,13 @@ namespace RenderDragon
         {
             double theta = hFOV / 2;
             double alpha = vFOV / 2;
-            double xLen = 2 * Math.Tan(theta) / (z+pos[2]);
+            double xLen = 1 * Math.Tan(theta) / (pos[2]+z);
             xLen += 1;
-            double yLen = 2 * Math.Tan(alpha) / (z+pos[2]);
+            double yLen = 1 * Math.Tan(alpha) / (pos[2]+z);
             yLen += 1;
 
-            double x2 = map(x, 0 - pos[0], xLen, 0, 1.0);
-            double y2 = map(y, 0 - pos[1], yLen, 0, 1.0);
+            double x2 = map(x, 0 - pos[0], xLen - pos[0], 0, 1.0);
+            double y2 = map(y, 0 - pos[1], yLen - pos[1], 0, 1.0);
 
             return new double[] { x2, y2 };
         }

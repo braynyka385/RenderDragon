@@ -19,7 +19,7 @@ namespace RenderDragon
         {
             InitializeComponent();
             player = new Player(0, 0, 0, 90);
-            Block b = new Block(1, 0, 1);
+            Block b = new Block(1, 1, 0);
             blocks.Add(b);
         }
 
@@ -37,7 +37,7 @@ namespace RenderDragon
                     {
                         p[j] = points[i,j];
                     }
-                    if (player.isPointInView(p[0], p[1], p[2]))
+                    if (true)//player.isPointInView(p[0], p[1], p[2])
                     {
                         vs.Add(p);
                         blockIsVisible = true;
@@ -61,7 +61,7 @@ namespace RenderDragon
 
         private void gameEngine_Tick(object sender, EventArgs e)
         {
-            player.Move(0.00, 0, -0.01);
+            player.Move(0.00, 0.00, -0.005);
             label1.Text = player.GetPos()[2].ToString();
             Refresh();
         }
