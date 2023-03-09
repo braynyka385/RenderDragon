@@ -65,12 +65,15 @@ namespace RenderDragon
 
                         int[] loc = vs[i];
                         double[] drawLoc = player.ProjectPoint(loc[0], loc[1], loc[2]);
-
-                        int drawX = Convert.ToInt32(drawLoc[0] * this.Width);
-                        int drawY = Convert.ToInt32(drawLoc[1] * this.Height);
-                        displayLocations[i, 0] = drawX;
-                        displayLocations[i, 1] = drawY;
-                        e.Graphics.FillEllipse(sB, drawX, drawY, 4, 4);
+                        if(drawLoc[0] < 1 && drawLoc[1] < 1 && drawLoc[0] > 0 && drawLoc[1] > 0)
+                        {
+                            int drawX = Convert.ToInt32(drawLoc[0] * this.Width);
+                            int drawY = Convert.ToInt32(drawLoc[1] * this.Height);
+                            displayLocations[i, 0] = drawX;
+                            displayLocations[i, 1] = drawY;
+                            e.Graphics.FillEllipse(sB, drawX, drawY, 4, 4);
+                        }
+                        
                         
                     }
                     DrawCubeLines(e.Graphics, displayLocations);
@@ -83,19 +86,25 @@ namespace RenderDragon
         {
             for(int i = 1; i < 4; i++)
             {
-                g.DrawLine(p, points[i - 1, 0], points[i - 1, 1], points[i, 0], points[i, 1]);
+                if(points[i, 0] != 0 && points[i-1, 0] != 0)
+                    g.DrawLine(p, points[i - 1, 0], points[i - 1, 1], points[i, 0], points[i, 1]);
+
             }
-            g.DrawLine(p, points[3, 0], points[3, 1], points[7, 0], points[7, 1]);
+           // g.DrawLine(p, points[3, 0], points[3, 1], points[7, 0], points[7, 1]);
             for (int i = 5; i < 8; i++)
             {
-                g.DrawLine(p, points[i - 1, 0], points[i - 1, 1], points[i, 0], points[i, 1]);
+                if (points[i, 0] != 0 && points[i - 1, 0] != 0)
+                    g.DrawLine(p, points[i - 1, 0], points[i - 1, 1], points[i, 0], points[i, 1]);
             }
             for (int i = 0; i < 4; i++)
             {
-                g.DrawLine(p, points[i, 0], points[i, 1], points[i + 4, 0], points[i + 4, 1]);
+                if (points[i, 0] != 0 && points[i +4, 0] != 0)
+                    g.DrawLine(p, points[i, 0], points[i, 1], points[i + 4, 0], points[i + 4, 1]);
             }
-            g.DrawLine(p, points[0, 0], points[0, 1], points[3, 0], points[3, 1]);
-            g.DrawLine(p, points[4, 0], points[4, 1], points[7, 0], points[7, 1]);
+            if (points[0, 0] != 0 && points[3, 0] != 0)
+                g.DrawLine(p, points[0, 0], points[0, 1], points[3, 0], points[3, 1]);
+            if (points[4, 0] != 0 && points[7, 0] != 0)
+                g.DrawLine(p, points[4, 0], points[4, 1], points[7, 0], points[7, 1]);
 
         }
 
@@ -105,10 +114,13 @@ namespace RenderDragon
             player.Move(((pressedKeys[2] ? 1 : 0) - (pressedKeys[3] ? 1 : 0))/div,
                 ((pressedKeys[4] ? 1 : 0) - (pressedKeys[5] ? 1 : 0)) / div,
                 ((pressedKeys[0] ? 1 : 0) - (pressedKeys[1] ? 1 : 0)) / div);
-            label1.Text = player.GetPos()[2].ToString();
+            label1.Text = player.GetCameraDir()[0].ToString();
             Refresh();
         }
-
+        private void GameScreen_MouseMove(object sender, MouseEventArgs e)
+        {
+            player.MoveCamera(e.X, e.Y, this.Width, this.Height);
+        }
         private void GameScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             switch (e.KeyCode)
@@ -158,6 +170,8 @@ namespace RenderDragon
                     break;
             }
         }
+
+        
         //https://en.wikipedia.org/wiki/Perspective_(graphical)
     }
 }

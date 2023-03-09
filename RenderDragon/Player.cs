@@ -29,6 +29,20 @@ namespace RenderDragon
             pos[1] += y;
             pos[2] += z;
         }
+        public void MoveCamera(double mX, double mY, int w, int h)
+        {
+            cameraDirX = map(mX, 0, w, 0, 90);
+            cameraDirY = map(mX, 0, h, 0, 90);
+        }
+        public double[] GetCameraDir()
+
+            
+        {
+            return new double[]
+            {
+                cameraDirX, cameraDirY
+            };
+        }
 
         public double[] GetPos()
         {
@@ -52,16 +66,15 @@ namespace RenderDragon
             return false;
         }
 
-        public double[] ProjectPoint(int x, int y, int z)
+        public double[] ProjectPoint(double x, double y, double z)
         {
             double theta = hFOV / 2;
             double alpha = vFOV / 2;
-            //double xLen = 1 * Math.Tan(theta) / (pos[2]+z);
-            double xLen = -(z + pos[2]) / Math.Tan(theta);
+            double dist = (z + pos[2]) / Math.Cos(DegToRad(cameraDirX));
+            double xLen = -dist / Math.Tan(DegToRad(theta));
             xLen *= 2;
             xLen += 1;
-            //double yLen = 1 * Math.Tan(alpha) / (pos[2]+z);
-            double yLen = -(z + pos[2]) / Math.Tan(alpha);
+            double yLen = -(z + pos[2]) / Math.Tan(DegToRad(alpha));
             yLen *= 2;
             yLen += 1;
 
@@ -70,6 +83,36 @@ namespace RenderDragon
 
             return new double[] { x2, y2 };
         }
+        /*public double[] ProjectPoint(double x, double y, double z)
+        {
+            double theta = hFOV / 2;
+            double alpha = vFOV / 2;
+            double xProp = Math.Cos(cameraDirX);
+            double zProp = Math.Cos(cameraDirX);
+            double zPort = zProp * (z + pos[2]);
+            double xLen = -(z + pos[2]) / Math.Tan(theta);
+            xLen *= 2;
+            xLen += 1;
+            double yLen = -(z + pos[2]) / Math.Tan(alpha);
+            yLen *= 2;
+            yLen += 1;
+
+            double x2 = map(x, 0 - pos[0], xLen - pos[0], 0.50, 1.0);
+            double y2 = map(y, 0 - pos[1], yLen - pos[1], 0.50, 1.0);
+
+            return new double[] { x2, y2 };
+        }*/
+
+        private double DegToRad(double deg)
+        {
+            //return deg * 0.01745329;
+            return deg;
+        }
+        private double DistanceTo(double x, double y, double z)
+        {
+            return Math.Sqrt((x * x) + (y * y) + (z * z));
+        }
+
 
         private double map(double s, double a1, double a2, double b1, double b2)
         {
