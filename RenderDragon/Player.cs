@@ -68,17 +68,26 @@ namespace RenderDragon
 
         public double[] ProjectPoint(double x, double y, double z)
         {
+            double deltaX = x - pos[0];
+            double deltaZ = z - pos[2];
+            double camX = DegToRad(cameraDirX);
             double theta = hFOV / 2;
             double alpha = vFOV / 2;
-            double dist = (z + pos[2]) / Math.Cos(DegToRad(cameraDirX));
-            double xLen = -dist / Math.Tan(DegToRad(theta));
+            double dist = Math.Sqrt((deltaX * deltaX) + (deltaZ * deltaZ));
+            double rX = Math.Sin(camX) * dist;
+            double rZ = Math.Cos(camX) * dist;
+            double XZPositional = (Math.Sin(camX) * pos[0]) + (Math.Cos(camX) * pos[2]);
+            double bXZPositional = (Math.Sin(camX) * x) + (Math.Cos(camX) * z);
+
+            double actZee = rX + rZ;
+            double xLen = -actZee / Math.Tan(theta);
             xLen *= 2;
             xLen += 1;
-            double yLen = -(z + pos[2]) / Math.Tan(DegToRad(alpha));
+            double yLen = -(z + pos[2]) / Math.Tan(alpha);
             yLen *= 2;
             yLen += 1;
 
-            double x2 = map(x, 0 - pos[0], xLen - pos[0], 0.50, 1.0);
+            double x2 = map(-bXZPositional, 0 - XZPositional, xLen - XZPositional, 0.50, 1.0);
             double y2 = map(y, 0 - pos[1], yLen - pos[1], 0.50, 1.0);
 
             return new double[] { x2, y2 };
@@ -105,8 +114,7 @@ namespace RenderDragon
 
         private double DegToRad(double deg)
         {
-            //return deg * 0.01745329;
-            return deg;
+            return deg * 0.01745329;
         }
         private double DistanceTo(double x, double y, double z)
         {
