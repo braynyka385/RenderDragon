@@ -114,7 +114,7 @@ namespace RenderDragon
             player.Move(((pressedKeys[2] ? 1 : 0) - (pressedKeys[3] ? 1 : 0))/div,
                 ((pressedKeys[4] ? 1 : 0) - (pressedKeys[5] ? 1 : 0)) / div,
                 ((pressedKeys[0] ? 1 : 0) - (pressedKeys[1] ? 1 : 0)) / div);
-            label1.Text = player.GetCameraDir()[0].ToString();
+            label1.Text = player.GetHeading()[0].ToString();
             Refresh();
         }
         private void GameScreen_MouseMove(object sender, MouseEventArgs e)

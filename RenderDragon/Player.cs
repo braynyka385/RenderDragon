@@ -8,8 +8,8 @@ namespace RenderDragon
 {
     internal class Player
     {
-        double cameraDirX = 0;
-        double cameraDirY = 0;
+        double headingX = 0;
+        double headingY = 0;
         byte hFOV;
         byte vFOV = 90;
 
@@ -31,16 +31,16 @@ namespace RenderDragon
         }
         public void MoveCamera(double mX, double mY, int w, int h)
         {
-            cameraDirX = map(mX, 0, w, 0, 90);
-            cameraDirY = map(mX, 0, h, 0, 90);
+            headingX = map(mX, 0, w, 0, 360);
+            headingY = map(mX, 0, h, 0, 360);
         }
-        public double[] GetCameraDir()
+        public double[] GetHeading()
 
             
         {
             return new double[]
             {
-                cameraDirX, cameraDirY
+                headingX, headingY
             };
         }
 
@@ -63,31 +63,40 @@ namespace RenderDragon
             {
                 return true;
             }
-            return false;
+            //return false;
+            return true;
         }
 
         public double[] ProjectPoint(double x, double y, double z)
         {
-            double deltaX = x - pos[0];
-            double deltaZ = z - pos[2];
-            double camX = DegToRad(cameraDirX);
             double theta = hFOV / 2;
             double alpha = vFOV / 2;
-            double dist = Math.Sqrt((deltaX * deltaX) + (deltaZ * deltaZ));
-            double rX = Math.Sin(camX) * dist;
-            double rZ = Math.Cos(camX) * dist;
-            double XZPositional = (Math.Sin(camX) * pos[0]) + (Math.Cos(camX) * pos[2]);
-            double bXZPositional = (Math.Sin(camX) * x) + (Math.Cos(camX) * z);
 
-            double actZee = rX + rZ;
-            double xLen = -actZee / Math.Tan(theta);
+            double headingFrom90 = headingX;
+
+            while(headingFrom90 > 90)
+            {
+                headingFrom90-=90;
+            }
+
+            double xOff = Math.Abs(pos[0] - x);
+            double zOff = Math.Abs(pos[2] - z);
+
+            double similarHyp = 1;
+            double similarZ = Math.Cos(DegToRad(headingFrom90));
+            double similarX = Math.Sin(DegToRad(headingFrom90));
+
+
+
+            double xLen = Math.Abs((z + pos[2])*similarZ - (x + pos[0])*similarX) / Math.Tan(theta);
             xLen *= 2;
             xLen += 1;
             double yLen = -(z + pos[2]) / Math.Tan(alpha);
             yLen *= 2;
             yLen += 1;
 
-            double x2 = map(-bXZPositional, 0 - XZPositional, xLen - XZPositional, 0.50, 1.0);
+
+            double x2 = map((x*similarZ) + (z*similarX), 0 - (pos[0]*similarZ + pos[2]*similarX), xLen - (pos[0]*similarZ + pos[2]*similarX), 0.5, 1.0);
             double y2 = map(y, 0 - pos[1], yLen - pos[1], 0.50, 1.0);
 
             return new double[] { x2, y2 };
@@ -111,7 +120,6 @@ namespace RenderDragon
 
             return new double[] { x2, y2 };
         }*/
-
         private double DegToRad(double deg)
         {
             return deg * 0.01745329;
