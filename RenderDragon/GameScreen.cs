@@ -22,14 +22,14 @@ namespace RenderDragon
             Random random = new Random();
             InitializeComponent();
             player = new Player(1, 1, 0, 90);
-            for(int x = -12; x < 13; x++)
+            //Block b = new Block(0, 0, 0);
+            for(int x = 0; x < 6; x++)
             {
-                for(int z = -12; z < 13; z++)
+                for(int y = 0; y < 6; y++)
                 {
-                    Block b = new Block(x, 0, z);
+                    Block b = new Block(x, y, 0);
                     blocks.Add(b);
                 }
-                
             }
             
             
@@ -115,6 +115,8 @@ namespace RenderDragon
                 ((pressedKeys[4] ? 1 : 0) - (pressedKeys[5] ? 1 : 0)) / div,
                 ((pressedKeys[0] ? 1 : 0) - (pressedKeys[1] ? 1 : 0)) / div);
             label1.Text = player.GetHeading()[0].ToString();
+            double[] p = player.GetPos();
+            label1.Text = $"{p[0]}, {p[1]}, {p[2]}";
             Refresh();
         }
         private void GameScreen_MouseMove(object sender, MouseEventArgs e)
